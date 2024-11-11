@@ -232,21 +232,34 @@ public class LibraryController {
         }
         return null; // Book not found
     }
-//    public Book searchBook() {
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.println("Search title, author or publisher name: ");
-//        String searchResult = scanner.nextLine();
-//        SearchType[] searchTypes = {SearchType.TITLE, SearchType.AUTHOR, SearchType.PUBLISHER};
-//
-//        // Run binary search for each search type
-//        for (SearchType searchType : searchTypes) {
-//            Book foundBook = binarySearch(searchResult, searchType);
-//            if (foundBook != null) {
-//                return foundBook; // Return the first found book
-//            }
-//        }
-//        return null; // when not found
-//    }
+
+    public void searchBook() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a search term (title, author, publisher, or year): ");
+        String searchTerm = scanner.nextLine().trim().toLowerCase();
+
+        List<Book> matchingBooks = new ArrayList<>();
+
+        for (Book book : books) {
+            // Check if the search term is in the title, author, publisher, or published year
+            if (book.getTitle().toLowerCase().contains(searchTerm) ||
+                    book.getAuthor().toLowerCase().contains(searchTerm) ||
+                    book.getPublisher().toLowerCase().contains(searchTerm) ||
+                    String.valueOf(book.getPublicationYear()).contains(searchTerm)) {
+                matchingBooks.add(book);
+            }
+        }
+
+        // Display the results
+        if (matchingBooks.isEmpty()) {
+            System.out.println("No books found matching the search term: " + searchTerm);
+        } else {
+            System.out.println("Matching books:");
+            for (Book book : matchingBooks) {
+                System.out.println(book);
+            }
+        }
+    }
 //
 //    public List<Book> editBook() {
 //        if (books.isEmpty()) {
