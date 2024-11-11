@@ -1,5 +1,6 @@
 package model;
 // implements Clonable? public abstract Product clone();
+
 public class Book {
     private String title;
     private String author;
@@ -7,13 +8,13 @@ public class Book {
     private int publishedYear;
     private boolean isAvailable;
 
-    public Book(){}
-    public Book(String author, boolean isAvailable, int publishedYear, String publisher, String title) {
-        this.author = author;
-        this.isAvailable = isAvailable;
-        this.publishedYear = publishedYear;
-        this.publisher = publisher;
+//    public Book(){}
+    public Book(String title, String author, String publisher,int publishedYear,  boolean isAvailable) {
         this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+        this.publishedYear = publishedYear;
+        this.isAvailable = isAvailable;
     }
 
     public String getAuthor() {
