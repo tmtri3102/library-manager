@@ -16,8 +16,8 @@ public class Main {
             System.out.println("2. Add a book");
             System.out.println("3. Edit a book");
             System.out.println("4. Remove a book");
-            System.out.println("5. Sort book list");
-            System.out.println("6. Search book by type");
+            System.out.println("5. Sort books by title");
+            System.out.println("6. Search for book(s)");
             System.out.println("7. Exit");
 
             switch (pickOption()) {
@@ -32,7 +32,7 @@ public class Main {
                     libraryController.editBook();
                     break;
                 case 4:
-//                    libraryController.removeBook();
+                    libraryController.removeBook();
                     break;
                 case 5:
                     libraryController.sortBook();

@@ -152,8 +152,21 @@ public class LibraryController {
     }
 
 /*==============  REMOVE  ==============*/
-    public void removeBook(Book book) {
-        books.remove(book);
+    public void removeBook() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the title of the book you want to remove: ");
+        String titleToRemove = scanner.nextLine().trim();
+
+        // Search for the book using the title
+        Book bookToRemove = searchBookByTitle(titleToRemove);
+
+        if (bookToRemove != null) {
+            books.remove(bookToRemove);
+            libraryStorage.writeBooks(bookToRemove); // Assuming this method updates the storage accordingly
+            System.out.println("Removed the book: " + formatBookDetails(bookToRemove));
+        } else {
+            System.out.println("Book not found.");
+        }
     }
 
 /*==============  EDIT  ==============*/
