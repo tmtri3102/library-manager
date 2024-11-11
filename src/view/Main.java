@@ -35,7 +35,7 @@ public class Main {
 //                    libraryController.removeBook();
                     break;
                 case 5:
-//                    libraryController.sortBook();
+                    libraryController.sortBook();
                     break;
                 case 6:
                     libraryController.searchBook();
@@ -59,8 +59,6 @@ public class Main {
         }
         return option;
     }
-
-
 }
 
 

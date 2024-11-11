@@ -2,11 +2,8 @@ package controller;
 
 import model.Book;
 import storage.*;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
 
+import java.util.*;
 
 
 public class LibraryController {
@@ -159,7 +156,7 @@ public class LibraryController {
         books.remove(book);
     }
 
-    /*==============  SEARCH  ==============*/
+/*==============  EDIT  ==============*/
     public void editBook() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the title of the book you want to edit: ");
@@ -233,6 +230,7 @@ public class LibraryController {
         return null; // Book not found
     }
 
+/*==============  SEARCH  ==============*/
     public void searchBook() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter a search term (title, author, publisher, or year): ");
@@ -278,46 +276,63 @@ public class LibraryController {
 //        }
 //        return books;
 //    }
+//
+//    public enum SearchType {
+//        TITLE,
+//        AUTHOR,
+//        PUBLISHER
+//    }
+//    public Book binarySearch(String searchText, SearchType searchType) {
+//        int start = 0;
+//        int end = books.size() - 1;
+//
+//        while (start <= end) {
+//            int mid = (start + end) / 2;
+//            int comparisonResult = getComparisonResult(searchText, searchType, mid);
+//            if (comparisonResult == 0) {
+//                return books.get(mid);
+//            } else if (comparisonResult < 0) {
+//                end = mid - 1;
+//            } else {
+//                start = mid + 1;
+//            }
+//        }
+//        return null;
+//    }
+//    private int getComparisonResult(String searchText, SearchType searchType, int mid) {
+//        String midBookValue;
+//        switch (searchType) {
+//            case TITLE:
+//                midBookValue = books.get(mid).getTitle();
+//                break;
+//            case AUTHOR:
+//                midBookValue = books.get(mid).getAuthor();
+//                break;
+//            case PUBLISHER:
+//                midBookValue = books.get(mid).getPublisher();
+//                break;
+//            default:
+//                throw new IllegalArgumentException("Invalid search type");
+//        }
+//        return midBookValue.compareToIgnoreCase(searchText);
+//    }
 
-    public enum SearchType {
-        TITLE,
-        AUTHOR,
-        PUBLISHER
+/*==============  SORT  ==============*/
+public void sortBook() {
+    Collections.sort(books, (book1, book2) ->
+            book1.getTitle().compareToIgnoreCase(book2.getTitle())
+    );
+
+    System.out.println("Books sorted by title:");
+    for (Book book : books) {
+        System.out.println(formatBookDetails(book));
     }
-    public Book binarySearch(String searchText, SearchType searchType) {
-        int start = 0;
-        int end = books.size() - 1;
+}
 
-        while (start <= end) {
-            int mid = (start + end) / 2;
-            int comparisonResult = getComparisonResult(searchText, searchType, mid);
-            if (comparisonResult == 0) {
-                return books.get(mid);
-            } else if (comparisonResult < 0) {
-                end = mid - 1;
-            } else {
-                start = mid + 1;
-            }
-        }
-        return null;
+    // Helper method to format book details
+    private String formatBookDetails(Book book) {
+        return String.format("%s, %s",
+                book.getTitle(),
+                book.getAuthor());
     }
-    private int getComparisonResult(String searchText, SearchType searchType, int mid) {
-        String midBookValue;
-        switch (searchType) {
-            case TITLE:
-                midBookValue = books.get(mid).getTitle();
-                break;
-            case AUTHOR:
-                midBookValue = books.get(mid).getAuthor();
-                break;
-            case PUBLISHER:
-                midBookValue = books.get(mid).getPublisher();
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid search type");
-        }
-        return midBookValue.compareToIgnoreCase(searchText);
-    }
-
-
 }
