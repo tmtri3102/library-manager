@@ -27,15 +27,15 @@ public class Main {
                 case 2:
 //                    libraryController.addBook(); // comment this to use sample data
                     libraryController.addSampleBook();
-//                    break;
+                    break;
                 case 3:
-//                    libraryManager.editBook();
+                    libraryController.editBook();
                     break;
                 case 4:
-//                    libraryManager.removeBook();
+//                    libraryController.removeBook();
                     break;
                 case 5:
-//                    libraryManager.sortBook();
+//                    libraryController.sortBook();
                     break;
                 case 6:
                     libraryController.searchBook();

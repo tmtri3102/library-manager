@@ -37,7 +37,7 @@ public class LibraryController {
         libraryStorage.writeBooks(sample1);
 
         Book sample2 = new Book("Educated", "Tara Westover", "456789", "Penguin", 1960, 259, true);
-        books.add(sample1);
+        books.add(sample2);
         libraryStorage.writeBooks(sample2);
         System.out.println("Added sample books to the list");
     }
@@ -160,22 +160,112 @@ public class LibraryController {
     }
 
     /*==============  SEARCH  ==============*/
-
-    public Book searchBook() {
+    public void editBook() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Search title, author or publisher name: ");
-        String searchResult = scanner.nextLine();
-        SearchType[] searchTypes = {SearchType.TITLE, SearchType.AUTHOR, SearchType.PUBLISHER};
+        System.out.print("Enter the title of the book you want to edit: ");
+        String titleToEdit = scanner.nextLine().trim();
 
-        // Run binary search for each search type
-        for (SearchType searchType : searchTypes) {
-            Book foundBook = binarySearch(searchResult, searchType);
-            if (foundBook != null) {
-                return foundBook; // Return the first found book
+        // Search for the book using the title
+        Book bookToEdit = searchBookByTitle(titleToEdit);
+
+        if (bookToEdit != null) {
+            System.out.println("Editing book: " + bookToEdit);
+
+            // Prompt for new details
+            System.out.print("Enter new author (leave blank to keep current): ");
+            String newAuthor = scanner.nextLine().trim();
+            if (!newAuthor.isEmpty()) {
+                bookToEdit.setAuthor(newAuthor);
+            }
+
+            System.out.print("Enter new publisher (leave blank to keep current): ");
+            String newPublisher = scanner.nextLine().trim();
+            if (!newPublisher.isEmpty()) {
+                bookToEdit.setPublisher(newPublisher);
+            }
+
+            System.out.print("Enter new published year (leave blank to keep current): ");
+            String yearInput = scanner.nextLine().trim();
+            if (!yearInput.isEmpty()) {
+                try {
+                    int newPublishedYear = Integer.parseInt(yearInput);
+                    bookToEdit.setPublicationYear(newPublishedYear);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid year input. Keeping current year.");
+                }
+            }
+
+            System.out.print("Enter new number of pages (leave blank to keep current): ");
+            String pagesInput = scanner.nextLine().trim();
+            if (!pagesInput.isEmpty()) {
+                try {
+                    int newPages = Integer.parseInt(pagesInput);
+                    bookToEdit.setPages(newPages);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid number of pages. Keeping current pages.");
+                }
+            }
+
+            System.out.print("Is the book available (true/false)? (leave blank to keep current): ");
+            String availabilityInput = scanner.nextLine().trim().toLowerCase();
+            if (!availabilityInput.isEmpty()) {
+                if (availabilityInput.equals("true") || availabilityInput.equals("false")) {
+                    bookToEdit.setAvailable(Boolean.parseBoolean(availabilityInput));
+                } else {
+                    System.out.println("Invalid input. Keeping current availability status.");
+                }
+            }
+
+            // Update the storage
+            libraryStorage.writeBooks(bookToEdit); // Assuming this method updates the book in the storage
+            System.out.println("Book updated successfully.");
+        } else {
+            System.out.println("Book not found.");
+        }
+    }
+
+    private Book searchBookByTitle(String title) {
+        for (Book book : books) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                return book;
             }
         }
-        return null; // when not found
+        return null; // Book not found
     }
+//    public Book searchBook() {
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Search title, author or publisher name: ");
+//        String searchResult = scanner.nextLine();
+//        SearchType[] searchTypes = {SearchType.TITLE, SearchType.AUTHOR, SearchType.PUBLISHER};
+//
+//        // Run binary search for each search type
+//        for (SearchType searchType : searchTypes) {
+//            Book foundBook = binarySearch(searchResult, searchType);
+//            if (foundBook != null) {
+//                return foundBook; // Return the first found book
+//            }
+//        }
+//        return null; // when not found
+//    }
+//
+//    public List<Book> editBook() {
+//        if (books.isEmpty()) {
+//            System.out.println("No book found.");
+//        } else {
+//            System.out.println("Editing book:");
+//            String id = inputValidation.isInTheList();
+//            for (Drink drink : books) {
+//                if (drink.getId().equals(id)) {
+//                    System.out.println(drink);
+//                    drinkInformation.inputDrinkInformation(drink);
+//                    break;
+//                }
+//            }
+//            System.out.println("Drink id " + id + " edited");
+//        }
+//        return books;
+//    }
+
     public enum SearchType {
         TITLE,
         AUTHOR,
