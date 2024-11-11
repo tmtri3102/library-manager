@@ -1,15 +1,18 @@
 package controller;
 
 import model.Book;
-
+import storage.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-public class LibraryController {
-    private List<Book> books  = new ArrayList<>();
 
+
+public class LibraryController {
+
+    static LibraryStorage libraryStorage = LibraryStorage.getInstance();
+    public static List<Book> books = libraryStorage.readBooks();
 /*==============  DISPLAY  ==============*/
     public void displayAllBooks() {
         try {
@@ -28,23 +31,18 @@ public class LibraryController {
     }
 
     public void addSampleBook() {
-        // Directly returning a sample book without user input
-        String title = "To Kill a Mockingbird";
-        String author = "Harper Lee";
-        String isbn = "9780061120084";
-        String publisher = "J.B. Lippincott & Co.";
-        int publishedYear = 1960;
-        int pages = 281;
-        boolean isAvailable = true;
 
-        Book sample1 = new Book(title, author, isbn, publisher, publishedYear, pages, isAvailable);
+        Book sample1 = new Book("To Kill a Mockingbird", "Harper Lee", "123456", "Lippincott & Co.", 1960, 169, true);
         books.add(sample1);
-        Book sample2 = new Book(title, author, isbn, publisher, publishedYear, pages, isAvailable);
-        books.add(sample2);
+        libraryStorage.writeBooks(sample1);
+
+        Book sample2 = new Book("Educated", "Tara Westover", "456789", "Penguin", 1960, 259, true);
+        books.add(sample1);
+        libraryStorage.writeBooks(sample2);
         System.out.println("Added sample books to the list");
     }
 
-    /*==============  ADD  ==============*/
+/*==============  ADD  ==============*/
     public void addBook() {
         Scanner scanner = new Scanner(System.in);
 
@@ -149,9 +147,10 @@ public class LibraryController {
             }
         }
 
-        // Book object
+        // Write to a CSV
         Book newBook = new Book(title, author, isbn, publisher, publishedYear, pages, isAvailable);
         books.add(newBook);
+        libraryStorage.writeBooks(newBook);
         System.out.println("Added the book \"" + newBook.getTitle() + "\" to the list");;
     }
 
@@ -161,6 +160,7 @@ public class LibraryController {
     }
 
     /*==============  SEARCH  ==============*/
+
     public Book searchBook() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Search title, author or publisher name: ");

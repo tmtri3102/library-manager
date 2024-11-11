@@ -25,9 +25,9 @@ public class Main {
                     libraryController.displayAllBooks();
                     break;
                 case 2:
-                    libraryController.addBook(); // comment this to use sample data
-//                    libraryController.addSampleBook();
-                    break;
+//                    libraryController.addBook(); // comment this to use sample data
+                    libraryController.addSampleBook();
+//                    break;
                 case 3:
 //                    libraryManager.editBook();
                     break;
