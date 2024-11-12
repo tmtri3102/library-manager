@@ -18,8 +18,12 @@ public class LibraryController {
             }
             else {
                 System.out.println("All books:");
+                System.out.printf("%-5s %-30s %-20s %-15s %-20s%n", "ID", "Title", "Author", "Year", "Publisher");
+                System.out.println("----------------------------------------------------------------------------------");
                 for (Book book : books) {
-                    System.out.println(book);
+                    System.out.printf("%-5s %-30s %-20s %-15d %-20s%n",
+                            book.getId(), book.getTitle(), book.getAuthor(),
+                            book.getPublicationYear(), book.getPublisher());
                 }
             }
         } catch (NullPointerException e) {
@@ -27,29 +31,32 @@ public class LibraryController {
         }
     }
 
+/*==============  ADD  ==============*/
+
     public void addSampleBook() {
-
-        Book sample1 = new Book("To Kill a Mockingbird", "Harper Lee", "123456", "Lippincott & Co.", 1960, 169, true);
+        Book sample1 = new Book(123, "To Kill a Mockingbird", "Harper Lee", 1969, "Lippincott");
         books.add(sample1);
-        libraryStorage.writeBooks(sample1);
 
-        Book sample2 = new Book("Educated", "Tara Westover", "456789", "Penguin", 1960, 259, true);
+        Book sample2 = new Book(456, "Educated", "Tara Westover", 1948, "Penguin");
         books.add(sample2);
-        libraryStorage.writeBooks(sample2);
-        System.out.println("Added sample books to the list");
+
+        System.out.println("Added these books to the list");
+
+        if(libraryStorage.readBooks().isEmpty()) {
+            libraryStorage.writeBooks(sample1);
+            libraryStorage.writeBooks(sample2);
+            displayAllBooks();
+        }
     }
 
-/*==============  ADD  ==============*/
     public void addBook() {
         Scanner scanner = new Scanner(System.in);
 
+        int id = 0;
         String title = "";
         String author = "";
-        String isbn = "";
         String publisher = "";
         int publishedYear = 0;
-        int pages = 0;
-        boolean isAvailable = false;
 
         // Get book title
         System.out.print("Enter book title: ");
@@ -80,15 +87,6 @@ public class LibraryController {
         }
         author = capitalizedAuthor.toString().trim();
 
-        // Get ISBN
-        System.out.print("Enter ISBN: ");
-        isbn = scanner.nextLine().trim();
-        while (!isbn.matches("^\\d{4,9}$")) {
-            System.out.println("Error: ISBN must be between 4 and 9 digits.");
-            System.out.print("Enter ISBN: ");
-            isbn = scanner.nextLine().trim();
-        }
-
         // Get publisher
         System.out.print("Enter publisher: ");
         publisher = scanner.nextLine().trim();
@@ -115,58 +113,42 @@ public class LibraryController {
             }
         }
 
-        // Get number of pages
-        validInput = false;
-        while (!validInput) {
-            try {
-                System.out.print("Enter number of pages: ");
-                pages = Integer.parseInt(scanner.nextLine().trim());
-                if (pages >= 100 && pages <= 1000) {
-                    validInput = true;
-                } else {
-                    System.out.println("Error: Pages must be between 100 and 1000.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Error: Please enter a valid number.");
-            }
-        }
-
-        // Get availability
-        validInput = false;
-        while (!validInput) {
-            System.out.print("Is the book available (true/false)?: ");
-            String input = scanner.nextLine().trim().toLowerCase();
-            if (input.equals("true") || input.equals("false")) {
-                isAvailable = Boolean.parseBoolean(input);
-                validInput = true;
-            } else {
-                System.out.println("Error: Please enter either 'true' or 'false'.");
-            }
-        }
-
         // Write to a CSV
-        Book newBook = new Book(title, author, isbn, publisher, publishedYear, pages, isAvailable);
+        Book newBook = new Book(id, title, author, publishedYear, publisher);
         books.add(newBook);
         libraryStorage.writeBooks(newBook);
         System.out.println("Added the book \"" + newBook.getTitle() + "\" to the list");;
     }
 
 /*==============  REMOVE  ==============*/
-    public void removeBook() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the title of the book you want to remove: ");
-        String titleToRemove = scanner.nextLine().trim();
+public void removeBook() {
+    System.out.println("Current books:");
+    displayAllBooks();
 
-        // Search for the book using the title
-        Book bookToRemove = searchBookByTitle(titleToRemove);
+    Scanner scanner = new Scanner(System.in);
+    System.out.print("Enter book ID you want to remove: ");
+    String idToRemove = scanner.nextLine().trim();
+    Book bookToRemove = searchBookById(idToRemove);
 
-        if (bookToRemove != null) {
-            books.remove(bookToRemove);
-            libraryStorage.writeBooks(bookToRemove); // Assuming this method updates the storage accordingly
-            System.out.println("Removed the book: " + formatBookDetails(bookToRemove));
-        } else {
-            System.out.println("Book not found.");
+    if (bookToRemove != null) {
+        System.out.println("Removing this book: " + bookToRemove.getTitle());
+
+        books.remove(bookToRemove);
+        libraryStorage.writeBooks(bookToRemove);
+        System.out.println("Book removed successfully. Current books:");
+        displayAllBooks();
+    } else {
+        System.out.println("Book not found.");
+    }
+}
+
+    private Book searchBookById(String id) {
+        for (Book book : books) {
+            if (book.getId() == Integer.parseInt(id)) {
+                return book;
+            }
         }
+        return null; // Book not found
     }
 
 /*==============  EDIT  ==============*/
@@ -181,7 +163,16 @@ public class LibraryController {
         if (bookToEdit != null) {
             System.out.println("Editing book: " + bookToEdit);
 
-            // Prompt for new details
+            System.out.print("Enter id (leave blank to keep current): ");
+            String idInput = scanner.nextLine().trim();
+            if (!idInput.isEmpty()) {
+                try {
+                    int newPublishedYear = Integer.parseInt(idInput);
+                    bookToEdit.setPublicationYear(newPublishedYear);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid year input. Keeping current year.");
+                }
+            }
             System.out.print("Enter new author (leave blank to keep current): ");
             String newAuthor = scanner.nextLine().trim();
             if (!newAuthor.isEmpty()) {
@@ -205,27 +196,6 @@ public class LibraryController {
                 }
             }
 
-            System.out.print("Enter new number of pages (leave blank to keep current): ");
-            String pagesInput = scanner.nextLine().trim();
-            if (!pagesInput.isEmpty()) {
-                try {
-                    int newPages = Integer.parseInt(pagesInput);
-                    bookToEdit.setPages(newPages);
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid number of pages. Keeping current pages.");
-                }
-            }
-
-            System.out.print("Is the book available (true/false)? (leave blank to keep current): ");
-            String availabilityInput = scanner.nextLine().trim().toLowerCase();
-            if (!availabilityInput.isEmpty()) {
-                if (availabilityInput.equals("true") || availabilityInput.equals("false")) {
-                    bookToEdit.setAvailable(Boolean.parseBoolean(availabilityInput));
-                } else {
-                    System.out.println("Invalid input. Keeping current availability status.");
-                }
-            }
-
             // Update the storage
             libraryStorage.writeBooks(bookToEdit); // Assuming this method updates the book in the storage
             System.out.println("Book updated successfully.");
@@ -246,29 +216,24 @@ public class LibraryController {
 /*==============  SEARCH  ==============*/
     public void searchBook() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter a search term (title, author, publisher, or year): ");
+        System.out.print("Enter a search term (title/author/publisher/year): ");
         String searchTerm = scanner.nextLine().trim().toLowerCase();
 
-        List<Book> matchingBooks = new ArrayList<>();
+        boolean foundAny = false;
+        System.out.println("Matching books:");
 
         for (Book book : books) {
-            // Check if the search term is in the title, author, publisher, or published year
             if (book.getTitle().toLowerCase().contains(searchTerm) ||
                     book.getAuthor().toLowerCase().contains(searchTerm) ||
                     book.getPublisher().toLowerCase().contains(searchTerm) ||
                     String.valueOf(book.getPublicationYear()).contains(searchTerm)) {
-                matchingBooks.add(book);
+                System.out.println(book);
+                foundAny = true;
             }
         }
 
-        // Display the results
-        if (matchingBooks.isEmpty()) {
+        if (!foundAny) {
             System.out.println("No books found matching the search term: " + searchTerm);
-        } else {
-            System.out.println("Matching books:");
-            for (Book book : matchingBooks) {
-                System.out.println(book);
-            }
         }
     }
 //
@@ -331,18 +296,17 @@ public class LibraryController {
 //    }
 
 /*==============  SORT  ==============*/
-public void sortBook() {
-    Collections.sort(books, (book1, book2) ->
-            book1.getTitle().compareToIgnoreCase(book2.getTitle())
-    );
+    public void sortBook() {
+        Collections.sort(books, (book1, book2) ->
+                book1.getTitle().compareToIgnoreCase(book2.getTitle())
+        );
 
-    System.out.println("Books sorted by title:");
-    for (Book book : books) {
-        System.out.println(formatBookDetails(book));
+        System.out.println("Books sorted by title:");
+        for (Book book : books) {
+            System.out.println(formatBookDetails(book));
+        }
     }
-}
 
-    // Helper method to format book details
     private String formatBookDetails(Book book) {
         return String.format("%s, %s",
                 book.getTitle(),

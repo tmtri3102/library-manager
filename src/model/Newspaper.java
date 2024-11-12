@@ -4,10 +4,9 @@ public class Newspaper extends Book{
     private String date;
     private String editor;
 
-    public Newspaper(String title, String author, String ISBN, String publisher, int publicationYear, int pages, boolean isAvailable, String date, String editor) {
-        super(title, author, ISBN, publisher, publicationYear, pages, isAvailable);
+    public Newspaper(int id, String title, String author, int publicationYear, String publisher, String date) {
+        super(id, title, author, publicationYear, publisher);
         this.date = date;
-        this.editor = editor;
     }
 
     public String getDate() {
@@ -16,14 +15,6 @@ public class Newspaper extends Book{
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getEditor() {
-        return editor;
-    }
-
-    public void setEditor(String editor) {
-        this.editor = editor;
     }
 
     @Override

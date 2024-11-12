@@ -5,3 +5,5 @@
 [] Algorithm - bubble Sort
 [] Algorithm - binary search?
 [] Algorithm - insertion sort
+[] Newspaper, magazine -> sort by genre, id, title
+
