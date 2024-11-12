@@ -1,6 +1,6 @@
 package model;
 
-public class Book implements Cloneable {
+public abstract class Book implements Cloneable {
     private int id;
     private String title;
     private String author;
@@ -62,4 +62,6 @@ public class Book implements Cloneable {
                 ", publisher='" + publisher + '\'' +
                 '}';
     }
+
+    public abstract String getType();
 }
