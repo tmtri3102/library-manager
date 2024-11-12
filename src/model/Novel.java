@@ -4,8 +4,8 @@ public class Novel extends Book {
     private String genre;
     private String language;
 
-    public Novel(int id, String title, String author, int publicationYear, String publisher, String genre, String language) {
-        super(id, title, author, publicationYear, publisher);
+    public Novel(int id, String title, String author, int publicationYear, String bookType, String genre, String language) {
+        super(id, title, author, publicationYear, bookType);
         this.genre = genre;
         this.language = language;
     }

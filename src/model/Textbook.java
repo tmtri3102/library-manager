@@ -6,8 +6,8 @@ public class Textbook extends Book {
     private String subject;
     private String gradeLevel;
 
-    public Textbook(int id, String title, String author, int publicationYear, String publisher, String subject, String gradeLevel) {
-        super(id, title, author, publicationYear, publisher);
+    public Textbook(int id, String title, String author, int publicationYear, String bookType, String subject, String gradeLevel) {
+        super(id, title, author, publicationYear, bookType);
         this.subject = subject;
         this.gradeLevel = gradeLevel;
     }

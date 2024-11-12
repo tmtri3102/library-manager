@@ -4,8 +4,8 @@ public class ComicBook extends Book {
     private String illustrator;
     private String series;
 
-    public ComicBook(int id, String title, String author, int publicationYear, String publisher, String illustrator, String series) {
-        super(id, title, author, publicationYear, publisher);
+    public ComicBook(int id, String title, String author, int publicationYear, String bookType, String illustrator, String series) {
+        super(id, title, author, publicationYear, bookType);
         this.illustrator = illustrator;
         this.series = series;
     }

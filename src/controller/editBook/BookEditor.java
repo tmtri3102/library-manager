@@ -36,10 +36,10 @@ public class BookEditor {
                 bookToEdit.setAuthor(newAuthor);
             }
 
-            System.out.print("Enter new publisher (leave blank to keep current): ");
+            System.out.print("Enter new book type (leave blank to keep current): ");
             String newPublisher = scanner.nextLine().trim();
             if (!newPublisher.isEmpty()) {
-                bookToEdit.setPublisher(newPublisher);
+                bookToEdit.setBookType(newPublisher);
             }
 
             System.out.print("Enter new published year (leave blank to keep current): ");

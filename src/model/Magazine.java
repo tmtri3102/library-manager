@@ -4,8 +4,8 @@ public class Magazine extends Book {
     private int issueNumber;
     private String publicationFrequency;
 
-    public Magazine(int id, String title, String author, int publicationYear, String publisher, int issueNumber, String publicationFrequency) {
-        super(id, title, author, publicationYear, publisher);
+    public Magazine(int id, String title, String author, int publicationYear, String bookType, int issueNumber, String publicationFrequency) {
+        super(id, title, author, publicationYear, bookType);
         this.issueNumber = issueNumber;
         this.publicationFrequency = publicationFrequency;
     }

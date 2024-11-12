@@ -9,7 +9,7 @@ public class BookSearcher {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void searchBook(List<Book> books) {
-        System.out.print("Enter a search term (title/author/publisher/year): ");
+        System.out.print("Enter a search term (title/author/year): ");
         String searchTerm = scanner.nextLine().trim().toLowerCase();
 
         boolean foundAny = false;
@@ -18,7 +18,6 @@ public class BookSearcher {
         for (Book book : books) {
             if (book.getTitle().toLowerCase().contains(searchTerm) ||
                     book.getAuthor().toLowerCase().contains(searchTerm) ||
-                    book.getPublisher().toLowerCase().contains(searchTerm) ||
                     String.valueOf(book.getPublicationYear()).contains(searchTerm)) {
                 System.out.println(book);
                 foundAny = true;

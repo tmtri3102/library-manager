@@ -5,7 +5,7 @@ Login
 - Login validation
 CSV
 - src/data/csv
-- Sort by title/publisher/author A-Z, Z-A
+- Sort by title/bookType/author A-Z, Z-A
 - Sort by year/id 0-9, 9-0
 - Add "type" column
 Search

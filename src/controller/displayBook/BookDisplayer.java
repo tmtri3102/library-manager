@@ -16,7 +16,7 @@ public class BookDisplayer {
                 for (Book book : books) {
                     System.out.printf("%-5s %-15s %-20s %-15d %-20s%n",
                             book.getId(), book.getTitle(), book.getAuthor(),
-                            book.getPublicationYear(), book.getPublisher());
+                            book.getPublicationYear(), book.getBookType());
                 }
             }
         } catch (NullPointerException e) {

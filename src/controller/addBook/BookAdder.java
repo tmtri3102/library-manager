@@ -1,183 +1,104 @@
 package controller.addBook;
+
 import controller.displayBook.BookDisplayer;
-import model.Book;
-//import model.TextBook;
+import model.*;
 import storage.LibraryStorage;
 
 import java.util.List;
 import java.util.Scanner;
 
-
 public class BookAdder {
     static LibraryStorage libraryStorage = LibraryStorage.getInstance();
     private static final Scanner scanner = new Scanner(System.in);
+
     public static void addBook(List<Book> books) {
-        Scanner scanner = new Scanner(System.in);
-
-        int id = promptForId();
-        String title = promptForTitle();
-        String author = promptForAuthor();
-        String publisher = promptForPublisher();
-        int publishedYear = promptForPublicationYear();
-
-// Get book title
-//        System.out.print("Enter book title: ");
-//        title = scanner.nextLine().trim();
-//        while (title.isEmpty()) {
-//            System.out.println("Error: Title cannot be empty.");
-//            System.out.print("Enter book title: ");
-//            title = scanner.nextLine().trim();
-//        }
-//
-//        // Get book author
-//        System.out.print("Enter book author: ");
-//        author = scanner.nextLine().trim();
-//        while (!author.matches("^[a-zA-Z\\s]+$")) {
-//            System.out.println("Error: Author should contain only letters and spaces.");
-//            System.out.print("Enter book author: ");
-//            author = scanner.nextLine().trim();
-//        }
-//        // Capitalize first letter of each word
-//        String[] words = author.split("\\s+");
-//        StringBuilder capitalizedAuthor = new StringBuilder();
-//        for (String word : words) {
-//            if (!word.isEmpty()) {
-//                capitalizedAuthor.append(Character.toUpperCase(word.charAt(0)))
-//                        .append(word.substring(1).toLowerCase())
-//                        .append(" ");
-//            }
-//        }
-//        author = capitalizedAuthor.toString().trim();
-//
-//        // Get publisher
-//        System.out.print("Enter publisher: ");
-//        publisher = scanner.nextLine().trim();
-//        while (publisher.isEmpty()) {
-//            System.out.println("Error: Publisher cannot be empty.");
-//            System.out.print("Enter publisher: ");
-//            publisher = scanner.nextLine().trim();
-//        }
-//
-//        // Get published year
-//        boolean validInput = false;
-//        int currentYear = java.time.Year.now().getValue();
-//        while (!validInput) {
-//            try {
-//                System.out.print("Enter published year: ");
-//                publishedYear = Integer.parseInt(scanner.nextLine().trim());
-//                if (publishedYear >= 1500 && publishedYear <= currentYear) {
-//                    validInput = true;
-//                } else {
-//                    System.out.println("Error: Year must be between 1500 and " + currentYear + ".");
-//                }
-//            } catch (NumberFormatException e) {
-//                System.out.println("Error: Please enter a valid 4-digit year.");
-//            }
-//        }
-        // Write to a CSV
-
-        Book newBook = new Book(id, title, author, publishedYear, publisher);
-        books.add(newBook);
-        System.out.println("Added the book \"" + newBook.getTitle() + "\" to the list");
-        libraryStorage.writeBooks(books);
-        BookDisplayer.displayBooks(books);
-    }
-
-    private static int promptForId() {
-        String idInput;
-        boolean validInput = false;
-        int id = -1;
-
-        while (!validInput) {
-            System.out.print("Enter Book ID: ");
-            idInput = scanner.nextLine().trim();
-            if (idInput.matches("^[1-9][0-9]{3}$")) {
-                id = Integer.parseInt(idInput);
-                validInput = true;
-            } else {
-                System.out.println("Error: Please enter 4-digit integer bigger than 0");
+        while (true) {
+            System.out.println("Choose book type to add:");
+            System.out.println("1. Comic Book");
+            System.out.println("2. Novel");
+            System.out.println("3. Textbook");
+            System.out.println("4. Manual");
+            System.out.println("5. Magazine");
+            System.out.println("6. Back");
+            int option = pickOption();
+            if (option == 6) return;
+            Book book = createBook(option);
+            if (book != null) {
+                books.add(book);
+                System.out.println("Added the book \"" + book.getTitle() + "\" to the list");
+                libraryStorage.writeBooks(books);
+                BookDisplayer.displayBooks(books);
             }
         }
-        return id;
     }
-    private static String promptForTitle() {
-        String title = "";
-        boolean validInput = false;
 
-        while (!validInput) {
-            System.out.print("Enter Book Title: ");
-            title = scanner.nextLine().trim();
-
-            if (title.matches("^[A-Z][a-zA-Z\\s]*$")) {
-                validInput = true;
-            } else {
-                System.out.println("Error: Please enter only letters and spaces. First letter must be capital.");
-            }
+    private static int pickOption() {
+        int option = 0;
+        try {
+            System.out.print("What do you want to do?: ");
+            option = scanner.nextInt();
+            scanner.nextLine();
+        } catch (Exception e) {
+            System.out.println("Please enter a number.");
+            scanner.nextLine();
         }
-        return title;
+        return option;
     }
-    private static String promptForAuthor() {
-        String author = "";
-        boolean validInput = false;
-        while (!validInput) {
-            System.out.print("Enter Book Author: ");
-            author = scanner.nextLine().trim();
 
-            if (author.matches("^[A-Z][a-zA-Z\\s]*$")) {
-                validInput = true;
-            } else {
-                System.out.println("Error: Please enter only letters and spaces. First letter must be capital.");
-            }
+    private static Book createBook(int bookType) {
+        int id = getValidatedInput("Enter Book ID: ", "^[1-9][0-9]{3}$", "Error: Please enter a 4-digit integer greater than 0.", true);
+        String title = getValidatedInput("Enter Book Title: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+        String author = getValidatedInput("Enter Book Author: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+        int publishedYear = getValidatedInput("Enter Publication Year: ", "^(19|20)\\d{2}$", "Error: Please enter a valid year (1900-2099).", true);
+        String bookTypeStr = getBookTypeString(bookType);
+
+        switch (bookType) {
+            case 1:
+                String illustrator = getValidatedInput("Enter Illustrator: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+                String series = getValidatedInput("Enter Series: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+                return new ComicBook(id, title, author, publishedYear, bookTypeStr, illustrator, series);
+            case 2:
+                String genre = getValidatedInput("Enter Genre: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+                String language = getValidatedInput("Enter Language: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+                return new Novel(id, title, author, publishedYear, bookTypeStr, genre, language);
+            case 3:
+                String subject = getValidatedInput("Enter Subject: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+                String gradeLevel = getValidatedInput("Enter Grade Level: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+                return new Textbook(id, title, author, publishedYear, bookTypeStr, subject, gradeLevel);
+            case 4:
+                String topic = getValidatedInput("Enter Topic: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+                String version = getValidatedInput("Enter Version: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+                return new Manual(id, title, author, publishedYear, bookTypeStr, topic, version);
+            case 5:
+                int issueNumber = getValidatedInput("Enter Issue Number: ", "^[0-9]+$", "Error: Please enter a valid issue number.", true);
+                String publicationFrequency = getValidatedInput("Enter Publication Frequency: ", "^[A-Z][a-zA-Z\\s]*$", "Error: Please enter only letters and spaces. First letter must be capital.", false);
+                return new Magazine(id, title, author, publishedYear, bookTypeStr, issueNumber, publicationFrequency);
+            default:
+                System.out.println("Invalid book type.");
+                return null;
         }
-        return author;
     }
-    private static int promptForPublicationYear() {
-        String yearInput="";
-        boolean validInput = false;
-        int year = -1;
 
-        while (!validInput) {
-            System.out.print("Enter Publication Year: ");
-            yearInput = scanner.nextLine().trim();
-
-            if (yearInput.matches("^(19|20)\\d{2}$")) {
-                year = Integer.parseInt(yearInput);
-                validInput = true;
-            } else {
-                System.out.println("Error: Please enter 4 numbers (1900-2099).");
-            }
+    private static String getBookTypeString(int bookType) {
+        switch (bookType) {
+            case 1: return "Comic Book";
+            case 2: return "Novel";
+            case 3: return "Textbook";
+            case 4: return "Manual";
+            case 5: return "Magazine";
+            default: return "Unknown";
         }
-        return year;
     }
-    private static String promptForPublisher() {
-        String publisher = "";
-        boolean validInput = false;
 
-        while (!validInput) {
-            System.out.print("Enter Book Publisher: ");
-            publisher = scanner.nextLine().trim();
-
-            if (publisher.matches("^[A-Z][a-zA-Z0-9\\s]*$")) { // Validation for publisher name
-                validInput = true;
-            } else {
-                System.out.println("Error: Please enter only letters and spaces. First letter must be capital.");
+    private static <T> T getValidatedInput(String prompt, String regex, String errorMessage, boolean isInteger) {
+        String input;
+        while (true) {
+            System.out.print(prompt);
+            input = scanner.nextLine().trim();
+            if (input.matches(regex)) {
+                return isInteger ? (T) Integer.valueOf(input) : (T) input;
             }
+            System.out.println(errorMessage);
         }
-        return publisher;
     }
-
-//    public void addSampleBook() {
-//        Book sample1 = new Book(123, "To Kill a Mockingbird", "Harper Lee", 1969, "Lippincott");
-//        books.add(sample1);
-//
-//        Book sample2 = new Book(456, "Educated", "Tara Westover", 1948, "Penguin");
-//        books.add(sample2);
-//
-//        if(libraryStorage.readBooks().isEmpty()) {
-//            libraryStorage.writeBooks(sample1);
-//            libraryStorage.writeBooks(sample2);
-//            System.out.println("Added these books to the list");
-//            displayAllBooks();
-//        }
-//    }
 }

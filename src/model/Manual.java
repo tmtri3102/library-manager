@@ -4,8 +4,8 @@ public class Manual extends Book {
     private String topic;
     private String version;
 
-    public Manual(int id, String title, String author, int publicationYear, String publisher, String topic, String version) {
-        super(id, title, author, publicationYear, publisher);
+    public Manual(int id, String title, String author, int publicationYear, String bookType, String topic, String version) {
+        super(id, title, author, publicationYear, bookType);
         this.topic = topic;
         this.version = version;
     }

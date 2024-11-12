@@ -4,15 +4,15 @@ public abstract class Book {
     private int id;
     private String title;
     private String author;
-    private String publisher;
+    private String bookType;
     private int publicationYear;
 
-    public Book(int id, String title, String author, int publicationYear, String publisher) {
+    public Book(int id, String title, String author, int publicationYear, String bookType) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
-        this.publisher = publisher;
+        this.bookType = bookType;
     }
 
     public int getId() {
@@ -43,11 +43,11 @@ public abstract class Book {
         this.publicationYear = publicationYear;
     }
 
-    public String getPublisher() {
-        return publisher;
+    public String getBookType() {
+        return bookType;
     }
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setBookType(String bookType) {
+        this.bookType = bookType;
     }
 
 
@@ -59,7 +59,7 @@ public abstract class Book {
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", publicationYear=" + publicationYear +
-                ", publisher='" + publisher + '\'' +
+                ", bookType='" + bookType + '\'' +
                 '}';
     }
 
