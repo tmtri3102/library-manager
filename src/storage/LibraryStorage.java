@@ -27,7 +27,7 @@ public class LibraryStorage {
 
             if (!fileExists) {
                 // If file not exist, write header first:
-                bw.write("Title,Author,ISBN,Publisher,PublishedYear,Pages,IsAvailable");
+                bw.write("Title,Author,ISBN,Publisher,PublishedYear");
                 bw.newLine();
             }
 
