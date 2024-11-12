@@ -19,9 +19,7 @@ public class BookAdder {
         String publisher = promptForPublisher();
         int publishedYear = promptForPublicationYear();
 
-
-
-        // Get book title
+// Get book title
 //        System.out.print("Enter book title: ");
 //        title = scanner.nextLine().trim();
 //        while (title.isEmpty()) {
@@ -76,10 +74,11 @@ public class BookAdder {
 //            }
 //        }
         // Write to a CSV
+
         Book newBook = new Book(id, title, author, publishedYear, publisher);
         books.add(newBook);
         System.out.println("Added the book \"" + newBook.getTitle() + "\" to the list");
-        libraryStorage.writeBooks(newBook);
+        libraryStorage.writeBooks(books);
         BookDisplayer.displayBooks(books);
     }
 
@@ -165,4 +164,19 @@ public class BookAdder {
         }
         return publisher;
     }
+
+//    public void addSampleBook() {
+//        Book sample1 = new Book(123, "To Kill a Mockingbird", "Harper Lee", 1969, "Lippincott");
+//        books.add(sample1);
+//
+//        Book sample2 = new Book(456, "Educated", "Tara Westover", 1948, "Penguin");
+//        books.add(sample2);
+//
+//        if(libraryStorage.readBooks().isEmpty()) {
+//            libraryStorage.writeBooks(sample1);
+//            libraryStorage.writeBooks(sample2);
+//            System.out.println("Added these books to the list");
+//            displayAllBooks();
+//        }
+//    }
 }

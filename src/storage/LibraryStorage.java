@@ -19,28 +19,37 @@ public class LibraryStorage {
         return instance;
     }
 
-    public void writeBooks(Book book) {
+    public void writeBooks(List<Book> books) {
         String csvFile = "books.csv";
         boolean fileExists = new File(csvFile).exists();
-        try (FileWriter fw = new FileWriter(csvFile, true);
+        try (FileWriter fw = new FileWriter(csvFile);
              BufferedWriter bw = new BufferedWriter(fw)) {
 
             if (!fileExists) {
                 // If file not exist, write header first:
-                bw.write("Title,Author,ISBN,Publisher,PublishedYear");
+                bw.write("ID,Title,Author,PublishedYear,Publisher");
                 bw.newLine();
             }
 
             // Write book data as CSV line
-            String line = String.format("%d,%s,%s,%d,%s",
+//            String line = String.format("%d,%s,%s,%d,%s",
+//                    book.getId(),
+//                    book.getTitle(),
+//                    book.getAuthor(),
+//                    book.getPublicationYear(),
+//                    book.getPublisher());
+//
+//            bw.write(line);
+            for (Book book : books) {
+                String line = String.format("%d,%s,%s,%d,%s",
                     book.getId(),
                     book.getTitle(),
                     book.getAuthor(),
                     book.getPublicationYear(),
                     book.getPublisher());
-
-            bw.write(line);
-            bw.newLine();
+                bw.write(line);
+                bw.newLine();
+            }
 
         } catch (IOException e) {
             System.out.println("Error writing to CSV file: " + e.getMessage());

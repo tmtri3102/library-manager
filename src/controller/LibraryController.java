@@ -1,5 +1,6 @@
 package controller;
 
+import controller.removeBook.BookRemover;
 import model.Book;
 import storage.*;
 
@@ -11,12 +12,12 @@ import controller.addBook.BookAdder;
 public class LibraryController {
 
     static LibraryStorage libraryStorage = LibraryStorage.getInstance();
-    //    public static List<Book> books = libraryStorage.readBooks();
+        public static List<Book> books = libraryStorage.readBooks();
 
-    private static List<Book> books;
-    public LibraryController() {
-        books = libraryStorage.readBooks();
-    }
+//    private static List<Book> books;
+//    public LibraryController() {
+//        books = libraryStorage.readBooks();
+//    }
 
     /*==============  DISPLAY  ==============*/
     public void displayAllBooks() {
@@ -47,20 +48,20 @@ public class LibraryController {
         BookAdder.addBook(books);
     }
 
-    public void addSampleBook() {
-        Book sample1 = new Book(123, "To Kill a Mockingbird", "Harper Lee", 1969, "Lippincott");
-        books.add(sample1);
-
-        Book sample2 = new Book(456, "Educated", "Tara Westover", 1948, "Penguin");
-        books.add(sample2);
-
-        if(libraryStorage.readBooks().isEmpty()) {
-            libraryStorage.writeBooks(sample1);
-            libraryStorage.writeBooks(sample2);
-            System.out.println("Added these books to the list");
-            displayAllBooks();
-        }
-    }
+//    public void addSampleBook() {
+//        Book sample1 = new Book(123, "To Kill a Mockingbird", "Harper Lee", 1969, "Lippincott");
+//        books.add(sample1);
+//
+//        Book sample2 = new Book(456, "Educated", "Tara Westover", 1948, "Penguin");
+//        books.add(sample2);
+//
+//        if(libraryStorage.readBooks().isEmpty()) {
+//            libraryStorage.writeBooks(sample1);
+//            libraryStorage.writeBooks(sample2);
+//            System.out.println("Added these books to the list");
+//            displayAllBooks();
+//        }
+//    }
 
 //    public void addBook() {
 //        Scanner scanner = new Scanner(System.in);
@@ -133,36 +134,39 @@ public class LibraryController {
 //        System.out.println("Added the book \"" + newBook.getTitle() + "\" to the list");;
 //    }
 
-/*==============  REMOVE  ==============*/
-public void removeBook() {
-    System.out.println("Current books:");
-    displayAllBooks();
-
-    Scanner scanner = new Scanner(System.in);
-    System.out.print("Enter book ID you want to remove: ");
-    String idToRemove = scanner.nextLine().trim();
-    Book bookToRemove = searchBookById(idToRemove);
-
-    if (bookToRemove != null) {
-        System.out.println("Removing this book: " + bookToRemove.getTitle());
-
-        books.remove(bookToRemove);
-        libraryStorage.writeBooks(bookToRemove);
-        System.out.println("Book removed successfully. Current books:");
-        displayAllBooks();
-    } else {
-        System.out.println("Book not found.");
+    /*==============  REMOVE  ==============*/
+    public void removeBook() {
+        BookRemover.removeBook(books);
     }
-}
+//public void removeBook() {
+//    System.out.println("Current books:");
+//    displayAllBooks();
+//
+//    Scanner scanner = new Scanner(System.in);
+//    System.out.print("Enter book ID you want to remove: ");
+//    String idToRemove = scanner.nextLine().trim();
+//    Book bookToRemove = searchBookById(idToRemove);
+//
+//    if (bookToRemove != null) {
+//        System.out.println("Removing this book: " + bookToRemove.getTitle());
+//
+//        books.remove(bookToRemove);
+//        libraryStorage.writeBooks(bookToRemove);
+//        System.out.println("Book removed successfully. Current books:");
+//        displayAllBooks();
+//    } else {
+//        System.out.println("Book not found.");
+//    }
+//}
 
-    private Book searchBookById(String id) {
-        for (Book book : books) {
-            if (book.getId() == Integer.parseInt(id)) {
-                return book;
-            }
-        }
-        return null; // Book not found
-    }
+//    private Book searchBookById(String id) {
+//        for (Book book : books) {
+//            if (book.getId() == Integer.parseInt(id)) {
+//                return book;
+//            }
+//        }
+//        return null; // Book not found
+//    }
 
 /*==============  EDIT  ==============*/
     public void editBook() {
@@ -210,7 +214,7 @@ public void removeBook() {
             }
 
             // Update the storage
-            libraryStorage.writeBooks(bookToEdit); // Assuming this method updates the book in the storage
+            libraryStorage.writeBooks(books);
             System.out.println("Book updated successfully.");
         } else {
             System.out.println("Book not found.");
