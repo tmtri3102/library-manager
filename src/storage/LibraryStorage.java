@@ -31,15 +31,6 @@ public class LibraryStorage {
                 bw.newLine();
             }
 
-// Write book data as CSV line
-//            String line = String.format("%d,%s,%s,%d,%s",
-//                    book.getId(),
-//                    book.getTitle(),
-//                    book.getAuthor(),
-//                    book.getPublicationYear(),
-//                    book.getPublisher());
-//
-//            bw.write(line);
             for (Book book : books) {
                 String line = String.format("%d,%s,%s,%d,%s",
                     book.getId(),

@@ -1,7 +1,7 @@
 package controller.addBook;
 import controller.displayBook.BookDisplayer;
 import model.Book;
-import model.TextBook;
+//import model.TextBook;
 import storage.LibraryStorage;
 
 import java.util.List;
@@ -76,7 +76,7 @@ public class BookAdder {
 //        }
         // Write to a CSV
 
-        Book newBook = new TextBook(id, title, author, publishedYear, publisher);
+        Book newBook = new Book(id, title, author, publishedYear, publisher);
         books.add(newBook);
         System.out.println("Added the book \"" + newBook.getTitle() + "\" to the list");
         libraryStorage.writeBooks(books);
